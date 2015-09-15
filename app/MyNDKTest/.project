@@ -32,9 +32,29 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>common</name>
+			<name>lib_assimp</name>
 			<type>2</type>
-			<locationURI>COMMON_SRC_LOC</locationURI>
+			<locationURI>ASSIMP_SRC_LOC</locationURI>
+		</link>
+		<link>
+			<name>lib_face</name>
+			<type>2</type>
+			<locationURI>FACE_SRC_LOC</locationURI>
+		</link>
+		<link>
+			<name>lib_gles</name>
+			<type>2</type>
+			<locationURI>GLES_SRC_LOC</locationURI>
+		</link>
+		<link>
+			<name>lib_matrix_calc</name>
+			<type>2</type>
+			<locationURI>MATRIX_CALC_SRC_LOC</locationURI>
+		</link>
+		<link>
+			<name>lib_ogldev_tools</name>
+			<type>2</type>
+			<locationURI>OGLDEV_TOOLS_SRC_LOC</locationURI>
 		</link>
 		<link>
 			<name>so_produce</name>
@@ -44,8 +64,24 @@
 	</linkedResources>
 	<variableList>
 		<variable>
-			<name>COMMON_SRC_LOC</name>
-			<value>$%7BPARENT-2-PROJECT_LOC%7D/common</value>
+			<name>ASSIMP_SRC_LOC</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/assimp</value>
+		</variable>
+		<variable>
+			<name>FACE_SRC_LOC</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/face</value>
+		</variable>
+		<variable>
+			<name>GLES_SRC_LOC</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/gles</value>
+		</variable>
+		<variable>
+			<name>MATRIX_CALC_SRC_LOC</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/matrix_calc</value>
+		</variable>
+		<variable>
+			<name>OGLDEV_TOOLS_SRC_LOC</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/ogldev_tools</value>
 		</variable>
 		<variable>
 			<name>SO_PRODUCE_SRC_LOC</name>

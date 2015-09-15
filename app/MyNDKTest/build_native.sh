@@ -5,4 +5,4 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PRJ_ROOT="$DIR/../../"
 APP_ANDROID_ROOT="$DIR"
-"$NDK"/ndk-build -j1 -C "$APP_ANDROID_ROOT" $* "NDK_MODULE_PATH=${PRJ_ROOT}"
+"$NDK"/ndk-build -j4 -C "$APP_ANDROID_ROOT" $* "NDK_MODULE_PATH=${PRJ_ROOT}"

@@ -3,9 +3,13 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="so_produce"/>
+	<classpathentry kind="src" path="lib_assimp"/>
+	<classpathentry kind="src" path="lib_face"/>
+	<classpathentry kind="src" path="lib_gles"/>
+	<classpathentry kind="src" path="lib_matrix_calc"/>
+	<classpathentry kind="src" path="lib_ogldev_tools"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="src" path="so_produce"/>
-	<classpathentry kind="src" path="common"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

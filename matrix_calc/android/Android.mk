@@ -1,0 +1,30 @@
+LOCAL_PATH:=$(call my-dir)
+include $(CLEAR_VARS)
+
+LOCAL_MODULE:=matrix_calc_static
+
+MY_SRC_BASE_PATH:=../src/
+MY_INC_BASE_PATH:=../inc/
+MY_INC_OUT_BASE_PATH:=../../gles
+
+#FILE_LIST:=$(wildcard $(LOCAL_PATH)/$(MY_SRC_BASE_PATH)/*.cpp)
+#LOCAL_SRC_FILES:=$(FILE_LIST:$(LOCAL_PATH)/%=%)
+
+MY_SRC_FILES:=\
+$(MY_SRC_BASE_PATH)/Matrices.cpp \
+$(MY_SRC_BASE_PATH)/common_structures.cpp \
+$(MY_SRC_BASE_PATH)/mesh_matrix_producer.cpp
+
+LOCAL_SRC_FILES:=$(MY_SRC_FILES)
+
+MY_C_INCLUDES:= \
+$(LOCAL_PATH)/$(MY_INC_BASE_PATH) \
+$(LOCAL_PATH)/$(MY_INC_OUT_BASE_PATH)
+
+LOCAL_EXPORT_C_INCLUDES:=$(MY_C_INCLUDES)
+LOCAL_C_INCLUDES:=$(MY_C_INCLUDES)
+
+LOCAL_CFLAGS += -Wno-psabi
+LOCAL_EXPORT_CFLAGS += -Wno-psabi
+
+include $(BUILD_STATIC_LIBRARY)
