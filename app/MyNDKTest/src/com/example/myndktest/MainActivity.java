@@ -44,6 +44,20 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_LONG).show();
             return;
         }
+        
+        float origin_path[][] = {{0.00f, 0.00f}, {1.00f, 0.00f}, {0.00f, 1.00f}, {1.00f, 1.00f},
+                {0.21f, 0.51f}, {0.39f, 0.52f}, {0.25f, 0.75f}, {0.39f, 0.76f}, {0.29f, 0.68f}};
+        float target_path[][] = {{0.00f, 0.00f},
+                {1.00f, 0.00f},
+                {0.00f, 1.00f},
+                {1.00f, 1.00f},
+                {0.37f, 0.39f},
+                {0.59f, 0.40f},
+                {0.38f, 0.54f},
+                {0.56f, 0.54f},
+                {0.47f, 0.49f}};
+        
+        GameLibJNIWrapper.key_points_with_corners(origin_path, target_path, "/sdcard/keyPoints/image-fbb.png", "/sdcard/keyPoints/image-lh.png");
     }
     
     private boolean isProbablyEmulator() {

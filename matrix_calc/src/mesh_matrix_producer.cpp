@@ -58,18 +58,20 @@ void Output(const char* pFile, MESH * pMesh);
 
 // GLOBALS ////////////////////////////////////////////////
 
-//»ñµÃÖÐ¼äµÄMesh
+//ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½Mesh
 MESH * middleMeshCreate(MESH * originMesh, MESH * targetMesh, REAL originWeight);
-//Éú³ÉÓÉÖÐ¼ä×ª»»µ½originºÍtargetµÄÄæ¾ØÕó
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½×ªï¿½ï¿½ï¿½ï¿½originï¿½ï¿½targetï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 MESH_MATRIX * triangleMatrixCreate(MESH * originMesh, MESH * targetMesh, float originWeight);
-//¸ù¾ÝÏñËØµãµÄÎ»ÖÃ²éÕÒÏìÓ¦µÄ¾ØÕó
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½Î»ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä¾ï¿½ï¿½ï¿½
 TRIANGLE_MATRIX * findTriangle_MATRIX(VERTEX2D point);
-//ÅÐ¶ÏµãÊÇ·ñ´¦ÓÚ¶à±ßÐÎÖÐ
+//ï¿½Ð¶Ïµï¿½ï¿½Ç·ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 int pnpoly(int nvert, float *vertx, float *verty, float testx, float testy);
-//¼ÆËãMESHÖÐtriangle_numÖµ
+//ï¿½ï¿½ï¿½ï¿½MESHï¿½ï¿½triangle_numÖµ
 void meshTriangleNumCount(MESH * const mesh);
-//½«×ø±ê×ª»»³ÉOpenGLµÄ×ø±êÏµµÄ×ø±ê
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½OpenGLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void mesh_for_opengl(MESH * mesh);
+
+void Input(float * data, int amount, MESH * pMesh);
 
 void mesh_init(const char * originPath, const char * targetPath, MESH * originMesh, MESH * targetMesh){
 	if(originPath == NULL || targetPath == NULL){
@@ -77,7 +79,7 @@ void mesh_init(const char * originPath, const char * targetPath, MESH * originMe
 		exit(1);
 	}
 
-	//»ñÈ¡Í¼Æ¬µÄÌØÕ÷µã£¬¹¹½¨DelaunayÈý½ÇÆÊ·Ö¡£
+	//ï¿½ï¿½È¡Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½Delaunayï¿½ï¿½ï¿½ï¿½ï¿½Ê·Ö¡ï¿½
 	Input(originPath, originMesh);
 	IncrementalDelaunay(originMesh);
 	mesh_for_opengl(originMesh);
@@ -88,10 +90,37 @@ void mesh_init(const char * originPath, const char * targetPath, MESH * originMe
 	meshTriangleNumCount(targetMesh);
 }
 
+void mesh_init(float * origin_key_points, float * target_key_points, int origin_length, int target_length, MESH * originMesh, MESH * targetMesh){
+    if(origin_key_points == NULL || target_key_points == NULL){
+        exit(1);
+    }
+//    Input("/sdcard/keyPoints/image-origin.txt", originMesh);
+    Input(origin_key_points, origin_length, originMesh);
+    IncrementalDelaunay(originMesh);
+    mesh_for_opengl(originMesh);
+    meshTriangleNumCount(originMesh);
+
+//    Input("/sdcard/keyPoints/image-target.txt", targetMesh);
+    Input(target_key_points, target_length, targetMesh);
+    IncrementalDelaunay(targetMesh);
+    mesh_for_opengl(targetMesh);
+    meshTriangleNumCount(targetMesh);
+}
+
+void Input(float * data, int amount, MESH * pMesh){
+    InitMesh(pMesh, amount);
+
+    int j;
+    for(j = 3; j < amount + 3; ++j){
+        ((VERTEX2D *)(pMesh->pVerArr + j))->x = data[(j-3) * 2 + 0];
+        ((VERTEX2D *)(pMesh->pVerArr + j))->y = data[(j-3) * 2 + 1];
+    }
+}
+
 // FUNCTIONS //////////////////////////////////////////////
 MESH_MATRIX * middle_mesh_matrix_producer(MESH * originMesh, MESH * targetMesh, const float originWeight)
 {
-	//Éú³ÉTRIANGLE_MATRIX¾ØÕó×é£¬ÓÃÓÚ¶¥µã²éÑ¯³öÊ¹ÓÃÄÄ×é£¨2¸ö£©¾ØÕó
+	//ï¿½ï¿½ï¿½ï¿½TRIANGLE_MATRIXï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½é£¨2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	MESH_MATRIX * mesh_matrix = triangleMatrixCreate(originMesh, targetMesh, originWeight);
 	return mesh_matrix;
 }
@@ -113,9 +142,9 @@ void meshTriangleNumCount(MESH * const mesh){
 }
 
 MESH_MATRIX * triangleMatrixCreate(MESH * originMesh, MESH * targetMesh, float originWeight){
-	//¹¹½¨ÖÐ¼ämesh
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½mesh
 	MESH * mMesh = middleMeshCreate(originMesh, targetMesh, originWeight);
-	//¹¹½¨origin,middle,target¾ØÕó
+	//ï¿½ï¿½ï¿½ï¿½origin,middle,targetï¿½ï¿½ï¿½ï¿½
 	Matrix3 * middleMatrix3 = new Matrix3[mMesh->triangle_num];
 	Matrix3 * middleMatrix3_2 = new Matrix3[mMesh->triangle_num];
 	Matrix3 * originMatrix3 = new Matrix3[originMesh->triangle_num];
@@ -173,7 +202,7 @@ MESH_MATRIX * triangleMatrixCreate(MESH * originMesh, MESH * targetMesh, float o
 		originTrianglePTR = originTrianglePTR->pNext;
 		targetTrianglePTR = targetTrianglePTR->pNext;
 	}
-	//¹¹½¨MESH_MATRIX¾ØÕó
+	//ï¿½ï¿½ï¿½ï¿½MESH_MATRIXï¿½ï¿½ï¿½ï¿½
 	MESH_MATRIX * mesh_matrix_ptr = new MESH_MATRIX();
 	mesh_matrix_ptr->middleMesh = mMesh;
 	mesh_matrix_ptr->triangle_matrix = new TRIANGLE_MATRIX[mMesh->triangle_num];
@@ -233,12 +262,12 @@ MESH * middleMeshCreate(MESH * originMesh, MESH * targetMesh, REAL originWeight)
 	TRIANGLE * originTrianglePTR = originMesh->pTriArr;
 	TRIANGLE * middleTrianglePTR;// = middleMesh->pTriArr;
 
-	//Ìî³äÊý×é
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for(int i = 0; i < middleMesh->vertex_num + 3; i++){
 		middleMesh->pVerArr[i].x = originMesh->pVerArr[i].x * originWeight + targetMesh->pVerArr[i].x * (1 - originWeight);
 		middleMesh->pVerArr[i].y = originMesh->pVerArr[i].y * originWeight + targetMesh->pVerArr[i].y * (1 - originWeight);
 	}
-	//Ìî³äË«Á´±í
+	//ï¿½ï¿½ï¿½Ë«ï¿½ï¿½ï¿½ï¿½
 	int k = 1;
 	TRIANGLE * trianglePtr;
 	for(int i = 0; i < middleMesh->triangle_num; i++){
@@ -306,8 +335,8 @@ void Input(const char* pFile, MESH * pMesh)
 }
 
 // Algorithm IncrementalDelaunay(V)
-// Input: ÓÉn¸öµã×é³ÉµÄ¶þÎ¬µã¼¯V
-// Output: DelaunayÈý½ÇÆÊ·ÖDT
+// Input: ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉµÄ¶ï¿½Î¬ï¿½ã¼¯V
+// Output: Delaunayï¿½ï¿½ï¿½ï¿½ï¿½Ê·ï¿½DT
 //	1.add a appropriate triangle boudingbox to contain V ( such as: we can use triangle abc, a=(0, 3M), b=(-3M,-3M), c=(3M, 0), M=Max({|x1|,|x2|,|x3|,...} U {|y1|,|y2|,|y3|,...}))
 //	2.initialize DT(a,b,c) as triangle abc
 //	3.for i <- 1 to n 

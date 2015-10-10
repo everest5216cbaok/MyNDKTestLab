@@ -10,4 +10,6 @@ public class GameLibJNIWrapper {
     public static native void on_surface_changed(int width, int height);
  
     public static native void on_draw_frame();
+    
+    public static native void key_points_with_corners(float origin_points[][], float target_points[][], String origin_pic_path, String target_pic_path);
 }

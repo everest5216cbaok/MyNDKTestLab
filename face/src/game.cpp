@@ -20,8 +20,8 @@
     Tutorial 16 - Basic Texture Mapping
 */
 /*
-    z注意点：顶点多增加了三个，这是进行三角剖分的后遗症，其实可以使用一个指针，指向顶点索引为3的位置。
-    由三角剖分得到的图像是在0~1区间，应该映射到-1~1区间。
+    z注锟斤拷悖猴拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟角斤拷锟斤拷锟斤拷锟斤拷锟绞分的猴拷锟斤拷症锟斤拷锟斤拷实锟斤拷锟斤拷使锟斤拷一锟斤拷指锟诫，指锟津顶碉拷锟斤拷锟斤拷为3锟斤拷位锟矫★拷
+    锟斤拷锟斤拷锟斤拷锟绞分得碉拷锟斤拷图锟斤拷锟斤拷锟斤拷0~1锟斤拷锟戒，应锟斤拷映锟戒到-1~1锟斤拷锟戒。
 */
 
 #include <stdio.h>
@@ -82,6 +82,20 @@ MESH * targetMesh;
 
 MESH_MATRIX * mesh_matrix = NULL;
 
+
+/*
+ * Added for change resouces.
+ * */
+int resourcesUpdate;
+char * originPath;
+char * targetPath;
+char * originPicPath;
+char * targetPicPath;
+float * origin_key_points;
+float * target_key_points;
+float origin_key_points_length;
+float target_key_points_length;
+
 const char* pVSFileName = "/sdcard/keyPoints/shader1.vs";
 const char* pFSFileName = "/sdcard/keyPoints/shader1.fs";
 
@@ -91,9 +105,19 @@ int vertexNum;
 int triangleNum;
 
 void mesh_compute(MESH * originMesh, MESH * targetMesh, const float originWeight);
+void resourcesUpdateAct();
+void setUpdate(float * origin, float * target, int origin_length, int target_length, char * origin_pic_path, char * target_pic_path);
 
 static void RenderSceneCB()
 {
+    if(resourcesUpdate == 1){
+        resourcesUpdate = 0;
+
+        resourcesUpdateAct();
+
+    }
+
+
     originWeightValue += 0.01f;
     if(originWeightValue >= 1.0)
         originWeightValue = 0.0;
@@ -282,16 +306,12 @@ void mesh_compute(MESH * originMesh, MESH * targetMesh, const float originWeight
 }
 
 void on_surface_created(){
-//    /*前期准备——纯计算-----------------------------------------------------------------------*/
-    originMesh = new MESH();
-    targetMesh = new MESH();
+//    /*前锟斤拷准锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷-----------------------------------------------------------------------*/
+    resourcesUpdate = 1;
 
-    char * originPath = "/sdcard/keyPoints/image-origin.txt";
-    char * targetPath = "/sdcard/keyPoints/image-target.txt";
+//    setUpdate(NULL, NULL, 9, 9, "/sdcard/keyPoints/image-fbb.png", "/sdcard/keyPoints/image-lh.png");
 
-    mesh_init(originPath, targetPath, originMesh, targetMesh);
-
-    /*前期准备——环境构建-----------------------------------------------------------------------*/
+    /*前锟斤拷准锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷-----------------------------------------------------------------------*/
 
     pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -307,15 +327,7 @@ void on_surface_created(){
     glUniform1i(gSampler, 0);
     glUniform1i(gSampler2, 1);
 
-    pTexture = new Texture(GL_TEXTURE_2D, "/sdcard/keyPoints/image-fbb.png");
-    pTexture2 = new Texture(GL_TEXTURE_2D, "/sdcard/keyPoints/image-lh.png");
 
-    if ((!pTexture->Load()) || (!pTexture2->Load())) {
-        exit(1);
-    }
-
-    pTexture->Bind(GL_TEXTURE0);
-    pTexture2->Bind(GL_TEXTURE1);
 
     gPersProjInfo.FOV = 60.0f;
     gPersProjInfo.Height = WINDOW_HEIGHT;
@@ -329,6 +341,39 @@ void on_surface_changed(){
 }
 
 void on_draw_frame(){
-    //刷新一次
+    //刷锟斤拷一锟斤拷
     RenderSceneCB();
+}
+
+void resourcesUpdateAct(){
+    originMesh = new MESH();
+    targetMesh = new MESH();
+
+//    mesh_init(originPath, targetPath, originMesh, targetMesh);
+    mesh_init(origin_key_points, target_key_points, origin_key_points_length, target_key_points_length, originMesh, targetMesh);
+
+    pTexture = new Texture(GL_TEXTURE_2D, originPicPath);
+    pTexture2 = new Texture(GL_TEXTURE_2D, targetPicPath);
+
+    if ((!pTexture->Load()) || (!pTexture2->Load())) {
+        exit(1);
+    }
+
+    pTexture->Bind(GL_TEXTURE0);
+    pTexture2->Bind(GL_TEXTURE1);
+}
+
+void setUpdate(float * origin, float * target, int origin_length, int target_length, char * origin_pic_path, char * target_pic_path){
+//    __android_log_print(ANDROID_LOG_INFO, "JNITag","%s", "run in setUpdate");
+    resourcesUpdate = 1;
+    origin_key_points = origin;
+    target_key_points = target;
+
+    origin_key_points_length = origin_length;
+    target_key_points_length = target_length;
+
+    originPicPath = origin_pic_path;
+    targetPicPath = target_pic_path;
+//
+//    __android_log_print(ANDROID_LOG_INFO, "JNITag","%d, %s, %s, %d, %d", update, origin_path, target_path, origin_length, target_length);
 }
